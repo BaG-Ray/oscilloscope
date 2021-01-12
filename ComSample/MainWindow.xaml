@@ -729,7 +729,7 @@
 
                     <CheckBox
                         x:Name="ButtonGridOn"
-                        Margin="140 10 390 670"
+                        Margin="140 8 350 668"
                         Background="DeepPink"
                         Content="ON"
                         Checked="GridOn_OnChecked"

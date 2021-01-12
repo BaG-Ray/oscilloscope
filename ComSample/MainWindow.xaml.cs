@@ -278,48 +278,49 @@ namespace ComSample
                     List<Double> listChThirdValue = new List<Double>();
                     List<Double> listChFourthValue = new List<Double>();
 
-
-                    int tempChFirst, tempTime, tempChSecond, tempChThird, tempChFourth;
-                    for (tempTime = 0; tempTime < TimeValue.Count(); tempTime++)
-                        listTime.Add(TimeValue[tempTime]);
-                    for (tempChFirst = 0; tempChFirst < TimeValue.Count(); tempChFirst++)
-                        listChFirstValue.Add(ChFirstValue[tempChFirst]);
-                    for (tempChSecond = 0; tempChSecond < TimeValue.Count(); tempChSecond++)
-                        listChSecondValue.Add(ChSecondValue[tempChSecond]);
-                    for (tempChThird = 0; tempChThird < TimeValue.Count(); tempChThird++)
-                        listChThirdValue.Add(ChThirdValue[tempChThird]);
-                    for (tempChFourth = 0; tempChFourth < TimeValue.Count(); tempChFourth++)
-                        listChFourthValue.Add(ChFourthValue[tempChFourth]);
-
-
-                    #region 精简图像(完成)
-
-                    if (listTime.Last() % 1000 == 0 && listTime.Last() != 0)
+                    if (ButtonGridOn.IsChecked == true)
                     {
-                        chart.PlotOriginX = listTime.Last();
+                        int tempChFirst, tempTime, tempChSecond, tempChThird, tempChFourth;
+                        for (tempTime = 0; tempTime < TimeValue.Count(); tempTime++)
+                            listTime.Add(TimeValue[tempTime]);
+                        for (tempChFirst = 0; tempChFirst < TimeValue.Count(); tempChFirst++)
+                            listChFirstValue.Add(ChFirstValue[tempChFirst]);
+                        for (tempChSecond = 0; tempChSecond < TimeValue.Count(); tempChSecond++)
+                            listChSecondValue.Add(ChSecondValue[tempChSecond]);
+                        for (tempChThird = 0; tempChThird < TimeValue.Count(); tempChThird++)
+                            listChThirdValue.Add(ChThirdValue[tempChThird]);
+                        for (tempChFourth = 0; tempChFourth < TimeValue.Count(); tempChFourth++)
+                            listChFourthValue.Add(ChFourthValue[tempChFourth]);
 
-                        //listTime.RemoveRange(0, 100);
-                        //listChFirstValue.RemoveRange(0, 100);
-                        //listChSecondValue.RemoveRange(0, 100);
-                        //listChThirdValue.RemoveRange(0, 100);
-                        //listChFourthValue.RemoveRange(0, 100);
 
-                        listTime.Clear();
-                        listChFirstValue.Clear();
-                        listChSecondValue.Clear();
-                        listChThirdValue.Clear();
-                        listChFourthValue.Clear();
+
+                        #region 精简图像(完成)
+
+                        if (listTime.Last() % 1000 == 0 && listTime.Last() != 0)
+                        {
+                            chart.PlotOriginX = listTime.Last();
+
+                            //listTime.RemoveRange(0, 100);
+                            //listChFirstValue.RemoveRange(0, 100);
+                            //listChSecondValue.RemoveRange(0, 100);
+                            //listChThirdValue.RemoveRange(0, 100);
+                            //listChFourthValue.RemoveRange(0, 100);
+
+                            listTime.Clear();
+                            listChFirstValue.Clear();
+                            listChSecondValue.Clear();
+                            listChThirdValue.Clear();
+                            listChFourthValue.Clear();
+                        }
+
+
+                        ChFirst.Plot(listTime, listChFirstValue);
+                        ChSecond.Plot(listTime, listChSecondValue);
+                        ChThird.Plot(listTime, listChThirdValue);
+                        ChFourth.Plot(listTime, listChFourthValue);
+
+                        #endregion
                     }
-
-
-                    ChFirst.Plot(listTime, listChFirstValue);
-                    ChSecond.Plot(listTime, listChSecondValue);
-                    ChThird.Plot(listTime, listChThirdValue);
-                    ChFourth.Plot(listTime, listChFourthValue);
-
-
-                    #endregion
-
                 }
         ));
             }
