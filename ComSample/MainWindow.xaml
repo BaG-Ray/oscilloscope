@@ -672,25 +672,29 @@
 
 
                         <TextBox
+                            Name="ReceivingTextBox"
                             Grid.Row="1"
+                            AcceptsReturn="True"
                             IsReadOnly="True"
                             Style="{DynamicResource TextBoxSevDataStyle}"
-                            Text="{Binding CurrentParameter.DataReceiveInfo}"
-                            Name="SendingTextBox"
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"/>
-
+                            Text ="{Binding CurrentParameter.DataReceiveInfo}"
+                            TextWrapping="Wrap" 
+                            VerticalScrollBarVisibility="Visible"/>
+                            
                         <StackPanel Grid.Row="2" Orientation="Horizontal">
 
                             <TextBox
+                                Name="SendingTextBox"
                                 Style="{DynamicResource TextBoxReqStyle}"
+                                TextWrapping="Wrap"
                                 Text="{Binding CurrentParameter.SendData}"
-                                TextWrapping="Wrap" />
+                                 />
                         </StackPanel>
 
                         <StackPanel Grid.Row="3" VerticalAlignment="Center">
                             <Border CornerRadius="5" />
                             <Button
+                                Name="SendingButton"
                                 Grid.Row="3"
                                 Width="120"
                                 Height="70"
@@ -729,10 +733,10 @@
 
                     <CheckBox
                         x:Name="ButtonGridOn"
-                        Margin="140 8 350 668"
+                        Margin="140,8,350,668"
                         Background="DeepPink"
-                        Content="ON"
                         Checked="GridOn_OnChecked"
+                        Content="ON"
                         IsChecked="False"
                         Style="{StaticResource chkBullet}"
                         Tag="ON" />
@@ -760,14 +764,10 @@
                                 Margin="10"
                                 IsAutoFitEnabled="True"
                                 IsHorizontalNavigationEnabled="True"
-                                IsVerticalNavigationEnabled="True"
-                                MaxWidth="1000"
-                            >
-                                <Grid Name="lines" >
-                                </Grid>
+                                IsVerticalNavigationEnabled="True">
+                                <Grid Name="lines" />
                             </wpf:Chart>
 
-                            <Rectangle Grid.Row="1"></Rectangle>
 
 
                             <!--  示波器按钮组件  -->

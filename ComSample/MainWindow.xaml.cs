@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -20,6 +21,8 @@ using System.Windows.Shapes;
 using InteractiveDataDisplay.WPF;
 using System.Reactive.Linq;
 using System.Windows.Threading;
+using ComSample.Common;
+using NModbus;
 
 namespace ComSample
 {
@@ -56,6 +59,10 @@ namespace ComSample
         private volatile bool canStop = false; //线程终止
         public bool gridingStatus = false;
 
+        private string tempCh1Receive;
+        private string tempCh2Receive;
+        private string tempCh3Receive;
+        private string tempCh4Receive;
 
 
 
@@ -191,7 +198,6 @@ namespace ComSample
         {
             while (true)
             {
-
                 #region 按钮绑定
 
                 Dispatcher.Invoke(
@@ -202,11 +208,24 @@ namespace ComSample
                             {
                                 ChFirst.Stroke = new SolidColorBrush(Colors.Crimson);
                                 ChFirst.Description = String.Format("CH1:");
+
+                                mainWindow.CurrentParameter.SendData = "01 03 08 AC 00 1E";
+                                mainWindow.CurrentParameter.Send();
+
+                                //tempCh1Receive = mainWindow.CurrentParameter.DataReceiveInfo;
+                                //tempCh1Receive = System.Text.RegularExpressions.Regex.Replace(tempCh1Receive, @"\s+", ",");  //替换字符必须在原字符串中没有出现
+                                //string[] arrCh1Receive = tempCh1Receive.Split(',');
+                                //tempCh1Receive = arrCh1Receive[6] + arrCh1Receive[5] + arrCh1Receive[4] + arrCh1Receive[3];
+                                //ChFirstTempValue = ConvertComplementCode(Int32.Parse(tempCh1Receive, System.Globalization.NumberStyles.HexNumber));
+                                //ChFirstTempValue /= 131072; 
                             }
                             else
                             {
                                 ChFirst.Stroke = new SolidColorBrush(Colors.Transparent);
                                 ChFirst.Description = String.Format("");
+
+
+                                ChFirstTempValue = 0;
                             }
 
                             if (ButtonCHSe.IsChecked == true)
@@ -217,8 +236,10 @@ namespace ComSample
                             }
                             else
                             {
+                               
                                 ChSecond.Stroke = new SolidColorBrush(Colors.Transparent);
                                 ChSecond.Description = String.Format("");
+
 
                             }
 
@@ -232,6 +253,7 @@ namespace ComSample
                             {
                                 ChThird.Stroke = new SolidColorBrush(Colors.Transparent);
                                 ChThird.Description = String.Format("");
+
 
                             }
 
@@ -247,15 +269,17 @@ namespace ComSample
                                 ChFourth.Description = String.Format("");
 
                             }
+
                         }
                     ));
 
 
 
                 #endregion
+               
 
 
-                System.Threading.Thread.Sleep(50);
+                System.Threading.Thread.Sleep(1000);
                 TimeValue.Add(timeTempValue);
                 ChFirstValue.Add(ChFirstTempValue);
                 ChSecondValue.Add(ChSecondTempValue);
@@ -263,7 +287,7 @@ namespace ComSample
                 ChFourthValue.Add(ChFourthTempValue);
 
                 timeTempValue = timeTempValue + 10;
-                ChFirstTempValue = Math.Sin(Math.PI * timeTempValue / 360);
+                
                 ChSecondTempValue = Math.Sin(Math.PI * (timeTempValue / 360 + 0.5));
                 ChThirdTempValue = Math.Sin(Math.PI * (timeTempValue / 360 + 1));
                 ChFourthTempValue = Math.Sin(Math.PI * (timeTempValue / 360 + 1.5));
@@ -299,6 +323,8 @@ namespace ComSample
                         if (listTime.Last() % 1000 == 0 && listTime.Last() != 0)
                         {
                             chart.PlotOriginX = listTime.Last();
+                            chart.PlotWidth = 1000;
+
 
                             //listTime.RemoveRange(0, 100);
                             //listChFirstValue.RemoveRange(0, 100);
@@ -338,6 +364,28 @@ namespace ComSample
             {
                 ButtonGridOn.Content = "ON";
             }
+        }
+
+        /// <summary>
+        /// 求一个32位数的补码
+        /// </summary>
+        /// <param name="OriginalCode">传入一个Int32整型</param>
+        /// <returns></returns>
+        public static long ConvertComplementCode(long OriginalCode)
+        {
+            long a = int.MaxValue;
+            long b = int.MinValue;
+            long c = a - b;
+            long d = 0;
+            if (OriginalCode > 0)
+            {
+                d = -(c - OriginalCode + 1);
+            }
+            else
+            {
+                d = c + OriginalCode + 1;
+            }
+            return d;
         }
     }
 }

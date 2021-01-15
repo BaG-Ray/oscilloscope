@@ -32,7 +32,7 @@ namespace ComSample.Common
                 byte hi = (byte)((crc & 0xFF00) >> 8);  //高位置
                 byte lo = (byte)(crc & 0x00FF);         //低位置
 
-                return new byte[] { hi, lo };
+                return new byte[] { lo, hi };
             }
             return new byte[] { 0, 0 };
         }
@@ -117,6 +117,27 @@ namespace ComSample.Common
 
         #endregion
 
+        public static bool ReceivingCheck(byte[] arr)
+        {
+            int lengths = arr.Length - 2;
+            byte[] tempBytes = new byte[lengths];
+            byte[] CRCCheck = new byte[2];
+            for (int i = 0; i < lengths; i++)
+            {
+                tempBytes[i] = arr[i];
+            }
+
+            CRCCheck = CRC16(tempBytes);
+            if (CRCCheck[0] == arr[lengths - 2] && CRCCheck[1] == arr[lengths - 1])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         #region  StringToHexString
 
         public static string StringToHexString(string str)
@@ -179,6 +200,25 @@ namespace ComSample.Common
         /// <param name="str"></param>
         /// <param name="isFilterChinese">是否过滤掉中文字符</param>
         /// <returns></returns>
+
+
+        //public static byte[] StringToHexByte(string hexstring , bool isFilterChinese)
+        //{
+
+        //    string[] tmpary = hexstring.Trim().Split(' ');
+        //    byte[] buff = new byte[tmpary.Length];
+        //    byte[] crcBytes = new byte[2];
+        //    for (int i = 0; i < buff.Length; i++)
+        //    {
+        //        buff[i] = Convert.ToByte(tmpary[i], 16);
+        //    }
+        //    crcBytes = CRC16(buff);
+        //    byte[] resulBytes = buff.Concat(crcBytes).Where(a => (int)a >= 0).ToArray();
+
+        //    return resulBytes;
+        //}
+
+
         public static byte[] StringToHexByte(string str, bool isFilterChinese)
         {
             string hex = isFilterChinese ? FilterChinese(str) : ConvertChinese(str);
@@ -189,11 +229,16 @@ namespace ComSample.Common
             hex += hex.Length % 2 != 0 ? "0" : "";
 
             byte[] result = new byte[hex.Length / 2];
+            byte[] crcBytes = new byte[2];
             for (int i = 0, c = result.Length; i < c; i++)
             {
                 result[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
             }
-            return result;
+
+            crcBytes = CRC16(result);
+            byte[] resulBytes = result.Concat(crcBytes).Where(a => (int)a >= 0).ToArray();
+
+            return resulBytes;
         }
         #endregion
 

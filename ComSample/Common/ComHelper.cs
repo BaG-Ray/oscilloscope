@@ -9,7 +9,7 @@ namespace ComSample.Common
 {
     public class ComHelper
     {
-        public static StopBits GetStopBits(string emp)
+        public static StopBits GetStopBits(string emp)                                                                                                                                                                                                                                                                                                                    
         {
             StopBits bits = StopBits.None;
             switch (emp)
